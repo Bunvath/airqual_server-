@@ -186,7 +186,7 @@
 
 
 <script>
-    var socket = io("http://localhost:5000")
+    var socket = io("https://kohkjongcontrol.herokuapp.com/")
     socket.on('open_light', data => {
         const light = JSON.parse(JSON.stringify(data))
         id = light.button

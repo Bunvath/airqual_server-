@@ -15,7 +15,7 @@ server.listen(PORT, function () {
 
 var io = require('socket.io')(server, {
     cors: {
-        origin: ['http://localhost:4200', 'https://kohkjongcontrol.herokuapp.com','http://192.168.0.103:5000'],
+        origin: ['http://localhost:', 'https://kohkjongcontrol.herokuapp.com','http://192.168.0.103:5000'],
         credentials: true
     },
     allowEIO3: true
