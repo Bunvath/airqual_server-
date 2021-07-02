@@ -30,7 +30,7 @@ io.on('connection', function (socket) {
     });
     socket.on('open_light', data => {
         console.log(data);
-        io.emit('open_light', data)
+        socket.broadcast.emit('open_light', data)
     });
     socket.on('server', data => {
         console.log(data);
