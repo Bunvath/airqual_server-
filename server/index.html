@@ -191,7 +191,13 @@
         const light = JSON.parse(JSON.stringify(data))
         id = light.button
         status = light.status
-        console.log('(' + id + ',' + status + ')')
+        if (id == 1){
+            document.getElementById('first').checked == status
+        }
+        if (id = 2){
+            document.getElementById('second').checked == status
+        }
+        
     })
 
     function turnLight(id) {
