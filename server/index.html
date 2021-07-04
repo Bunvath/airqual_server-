@@ -8,19 +8,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <style href="./index.css"></style>
 </head>
 
 <body>
     <label class="switch">
-        <input type="checkbox" id="first" onchange="turnLight('first')" value="1">
+        <input type="checkbox" id="first" onchange="turnLight('first')" value="1" >
         <div>
             <span></span>
         </div>
     </label>
 
     <label class="switch">
-        <input type="checkbox" id="second" onchange="turnLight('second')" value="2">
+        <input type="checkbox" id="second" onchange="turnLight('second')" value="2" >
         <div>
             <span></span>
         </div>
@@ -186,16 +187,21 @@
 
 
 <script>
-    var socket = io("https://kohkjongcontrol.herokuapp.com/")
+    
+
+    // let button_1 = document.getElementById('first')
+    // let button_2 = document.getElementById('second')
+    var socket = io("")
     socket.on('open_light', data => {
         const light = JSON.parse(JSON.stringify(data))
-        id = light.button
-        status = light.status
+        console.log(light)
+        var id = light.button
+        var status = light.status
         if (id == 1){
-            document.getElementById('first').checked == status
+            $("#first").prop("checked", status)
         }
-        if (id = 2){
-            document.getElementById('second').checked == status
+        else if (id == 2){
+            $("#second").prop("checked", status)
         }
         
     })
@@ -208,10 +214,30 @@
                 button: button.value,
                 status: false
             })
+            socket.on('open_light',data=>{
+                
+                if (data==null){
+                    button.disabled = true
+                } else{
+                    button.disabled = false
+                }
+            })
+            console.log("hdhdhdhhdhdh")
+            
         } else if (button.checked) {
             socket.emit('open_light', {
                 button: button.value,
                 status: true
+            })
+            socket.on('open_light',data=>{
+                console.log("ddjdjjdjdjsdj")
+                if (data == null){
+                    console.log("button enable")
+                    button.disabled = true
+                } else{
+                    button.disabled = false
+                    console.log("button disable")
+                }
             })
         }
 
