@@ -4,6 +4,53 @@ var app = require('./app')
 var http = require('http');
 var server = http.Server(app);
 
+
+function Dictionary(){
+    this.dataStore = [];
+    this.add = function(button,status){
+        this.dataStore.push({
+            button: button,
+            status: status
+        })
+    }
+    this.removeAt = function(button){
+        for (i = 0; i < this.dataStore.length;i++){
+            if (this.dataStore[i].button === button){
+                this.dataStore.splice(this.dataStore[i],1)
+                return this.dataStore
+            }
+        }
+        return this.dataStore
+    }
+    this.updateAt = function(button,status){
+        for (i = 0; i <this.dataStore.length;i++){
+            if (this.dataStore[i].button === button){
+                this.dataStore[i].status = status
+                return this.dataStore
+            }
+        }
+        return this.dataStore
+    }
+    this.findAt = function(button){
+        for (i = 0;i <this.dataStore.length;i++){
+            if (this.dataStore[i].button === button){
+                return button
+            }
+        }
+        return this.dataStore
+    }
+    this.checkButton = function(button){
+        i = this.findAt(button)
+        if (i ===button){
+            return true
+        }else{
+            return false
+        }
+
+
+    }
+}
+var dictionary = new Dictionary()
 // app.get('/', (req, res) => {
 //     res.send('<h1>Hello world</h1>');
 // });
@@ -23,14 +70,28 @@ var io = require('socket.io')(server, {
 
 io.on('connection', function (socket) {
 
-    console.log(socket.id + ' connected');
+    console.log(socket.id + ' connected');  
+    io.emit("initialize",dictionary.dataStore)
     socket.on('message', function (data) {
         console.log(data);
         socket.broadcast.emit('message', data);
     });
     socket.on('open_light', data => {
-        console.log(data);
         socket.broadcast.emit('open_light', data)
+        var message = JSON.parse(JSON.stringify(data))
+        var button = message.button
+        var status = message.status
+        var exist = dictionary.checkButton(button)
+        console.log(exist)
+        if (exist){
+            dictionary.updateAt(button,status)
+        }else{
+            dictionary.add(button,status)
+        }
+        console.log(dictionary.dataStore)
+        
+
+        
     });
     socket.on('server', data => {
         console.log(data);

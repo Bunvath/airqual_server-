@@ -12,16 +12,16 @@
     <style href="./index.css"></style>
 </head>
 
-<body>
+<body onload="onInit()">
     <label class="switch">
-        <input type="checkbox" id="first" onchange="turnLight('first')" value="1" >
+        <input type="checkbox" id="first" onchange="turnLight('first')" value="0" >
         <div>
             <span></span>
         </div>
     </label>
 
     <label class="switch">
-        <input type="checkbox" id="second" onchange="turnLight('second')" value="2" >
+        <input type="checkbox" id="second" onchange="turnLight('second')" value="1" >
         <div>
             <span></span>
         </div>
@@ -194,7 +194,6 @@
     var socket = io("")
     socket.on('open_light', data => {
         const light = JSON.parse(JSON.stringify(data))
-        console.log(light)
         var id = light.button
         var status = light.status
         if (id == 1){
@@ -214,32 +213,39 @@
                 button: button.value,
                 status: false
             })
-            socket.on('open_light',data=>{
-                
-                if (data==null){
-                    button.disabled = true
-                } else{
-                    button.disabled = false
-                }
-            })
-            console.log("hdhdhdhhdhdh")
             
         } else if (button.checked) {
             socket.emit('open_light', {
                 button: button.value,
                 status: true
             })
-            socket.on('open_light',data=>{
-                console.log("ddjdjjdjdjsdj")
-                if (data == null){
-                    console.log("button enable")
-                    button.disabled = true
-                } else{
-                    button.disabled = false
-                    console.log("button disable")
-                }
-            })
         }
 
+    }
+    function onInit(){
+        var socket = io("")
+       
+        socket.on('initialize',event=>{
+            const light = JSON.parse(JSON.stringify(event))
+            console.log(light)
+            for (i=0;i<light.length;i++){
+                if (light[i].button == 0){
+                    $("#first").prop("checked", light[i].status)
+                }
+                if(light[i].button == 1){
+                    $("#second").prop("checked", light[i].status)
+                }
+
+            }
+            var id = light.button
+            var status = light.status
+            if (id == 1){
+                $("#first").prop("checked", true)
+            }
+            else if (id == 2){
+                $("#second").prop("checked", true)
+            }
+
+        })
     }
 </script>
