@@ -16,6 +16,9 @@
     <script>
         var socket = io("")
         function initialize(socket){
+            $("#first").prop("disabled", true)
+            $("#second").prop("disabled", true)
+
             socket.on('initialize',event=>{
             const light = JSON.parse(JSON.stringify(event))
             for (i=0;i<light.length;i++){
@@ -26,13 +29,17 @@
                     $("#second").prop("checked", light[i].status)
                 }
             }
-        })
 
+        })
+            $("#first").prop("disabled", false)
+            $("#second").prop("disabled", false)
         }
         if (document.readyState = 'loading'){
             document.addEventListener('load',initialize(socket))
+            console.log("on loading")
         }else{
             initialize(socket)
+            console.log("finished loading")
 
         }
   
