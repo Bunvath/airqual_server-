@@ -12,10 +12,10 @@
     <style href="./index.css"></style>
 </head>
 
-<body onload="onInit()">
+<body>
     <script>
         var socket = io("")
-        document.addEventListener('DOMContentLoaded',function(){
+        function initialize(socket){
             socket.on('initialize',event=>{
             const light = JSON.parse(JSON.stringify(event))
             for (i=0;i<light.length;i++){
@@ -27,7 +27,15 @@
                 }
             }
         })
-    })
+
+        }
+        if (document.readyState = 'loading'){
+            document.addEventListener('DOMContentLoaded',initialize(socket))
+        }else{
+            initialize(socket)
+
+        }
+  
     </script>
     <label class="switch">
         <input type="checkbox" id="first" onchange="turnLight('first')" value="1" >
