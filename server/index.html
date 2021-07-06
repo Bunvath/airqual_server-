@@ -13,6 +13,22 @@
 </head>
 
 <body onload="onInit()">
+    <script>
+        var socket = io("")
+        document.addEventListener('DOMContentLoaded',function(){
+            socket.on('initialize',event=>{
+            const light = JSON.parse(JSON.stringify(event))
+            for (i=0;i<light.length;i++){
+                if (light[i].button == 1){
+                    $("#first").prop("checked", light[i].status)
+                }
+                if(light[i].button == 2){
+                    $("#second").prop("checked", light[i].status)
+                }
+            }
+        })
+    })
+    </script>
     <label class="switch">
         <input type="checkbox" id="first" onchange="turnLight('first')" value="1" >
         <div>
@@ -221,19 +237,19 @@
         }
 
     }
-    function onInit(){
-        var socket = io("")
-        socket.on('initialize',event=>{
-            const light = JSON.parse(JSON.stringify(event))
-            console.log(light)
-            for (i=0;i<light.length;i++){
-                if (light[i].button == 1){
-                    $("#first").prop("checked", light[i].status)
-                }
-                if(light[i].button == 2){
-                    $("#second").prop("checked", light[i].status)
-                }
-            }
-        })
-    }
+    // function onInit(){
+    //     var socket = io("")
+    //     socket.on('initialize',event=>{
+    //         const light = JSON.parse(JSON.stringify(event))
+    //         console.log(light)
+    //         for (i=0;i<light.length;i++){
+    //             if (light[i].button == 1){
+    //                 $("#first").prop("checked", light[i].status)
+    //             }
+    //             if(light[i].button == 2){
+    //                 $("#second").prop("checked", light[i].status)
+    //             }
+    //         }
+    //     })
+    // }
 </script>
