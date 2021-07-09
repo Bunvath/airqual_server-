@@ -89,10 +89,28 @@ io.on('connection', function (socket) {
             dictionary.add(button,status)
         }
         console.log(dictionary.dataStore)
-        
-
-        
     });
+    socket.on('remote',data=>{
+        var control = JSON.parse(JSON.stringify(data))
+        var type = control.type
+        var temp = control.temp
+        var speed = control.speed
+        var exist  = dictionary.checkButton(type)
+        if (type === 'air_con'){
+            if (exist){
+                dictionary.updateAt(type,temp)
+            }else{
+                dictionary.add(type,temp)
+            }
+        } else{
+            if (exist){
+                dictionary.updateAt(type,speed)
+            }else{
+                dictionary.add(type,speed)
+            }
+        }
+        console.log(dictionary.dataStore)
+    })
     socket.on('server', data => {
         console.log(data);
     })
@@ -103,6 +121,12 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("open_light", data)
         console.log(data)
     })
+    socket.on('remote',data=>{
+        socket.broadcast.emit("remote",data)
+        // console.log(data)
+
+    })
+    
 });
 
 
