@@ -5,45 +5,45 @@ var http = require('http');
 var server = http.Server(app);
 
 
-function Dictionary(){
+function Dictionary() {
     this.dataStore = [];
-    this.add = function(button,status){
+    this.add = function (button, status) {
         this.dataStore.push({
             button: button,
             status: status
         })
     }
-    this.removeAt = function(button){
-        for (i = 0; i < this.dataStore.length;i++){
-            if (this.dataStore[i].button === button){
-                this.dataStore.splice(this.dataStore[i],1)
+    this.removeAt = function (button) {
+        for (i = 0; i < this.dataStore.length; i++) {
+            if (this.dataStore[i].button === button) {
+                this.dataStore.splice(this.dataStore[i], 1)
                 return this.dataStore
             }
         }
         return this.dataStore
     }
-    this.updateAt = function(button,status){
-        for (i = 0; i <this.dataStore.length;i++){
-            if (this.dataStore[i].button === button){
+    this.updateAt = function (button, status) {
+        for (i = 0; i < this.dataStore.length; i++) {
+            if (this.dataStore[i].button === button) {
                 this.dataStore[i].status = status
                 return this.dataStore
             }
         }
         return this.dataStore
     }
-    this.findAt = function(button){
-        for (i = 0;i <this.dataStore.length;i++){
-            if (this.dataStore[i].button === button){
+    this.findAt = function (button) {
+        for (i = 0; i < this.dataStore.length; i++) {
+            if (this.dataStore[i].button === button) {
                 return button
             }
         }
         return this.dataStore
     }
-    this.checkButton = function(button){
+    this.checkButton = function (button) {
         i = this.findAt(button)
-        if (i ===button){
+        if (i === button) {
             return true
-        }else{
+        } else {
             return false
         }
 
@@ -62,7 +62,7 @@ server.listen(PORT, function () {
 
 var io = require('socket.io')(server, {
     cors: {
-        origin: ['http://localhost:', 'https://kohkjongcontrol.herokuapp.com','http://192.168.0.103:5000'],
+        origin: ['http://localhost:4200', 'https://kohkjongcontrol.herokuapp.com', 'http://192.168.0.103:5000'],
         credentials: true
     },
     allowEIO3: true
@@ -70,10 +70,8 @@ var io = require('socket.io')(server, {
 
 io.on('connection', function (socket) {
 
-    console.log(socket.id + ' connected');  
-    io.emit("initialize",dictionary.dataStore)
+    console.log(socket.id + ' connected');
     socket.on('message', function (data) {
-        console.log(data);
         socket.broadcast.emit('message', data);
     });
     socket.on('open_light', data => {
@@ -82,34 +80,44 @@ io.on('connection', function (socket) {
         var button = message.button
         var status = message.status
         var exist = dictionary.checkButton(button)
-        console.log(exist)
-        if (exist){
-            dictionary.updateAt(button,status)
-        }else{
-            dictionary.add(button,status)
+        if (exist) {
+            dictionary.updateAt(button, status)
+        } else {
+            dictionary.add(button, status)
         }
         console.log(dictionary.dataStore)
     });
-    socket.on('remote',data=>{
+
+    socket.on('init', data => {
+        io.emit('initialize', dictionary.dataStore)
+    })
+    socket.on('data', data => {
+        console.log("socket", data)
+    })
+    socket.on('remote', data => {
         var control = JSON.parse(JSON.stringify(data))
         var type = control.type
         var temp = control.temp
         var speed = control.speed
-        var exist  = dictionary.checkButton(type)
-        if (type === 'air_con'){
-            if (exist){
-                dictionary.updateAt(type,temp)
-            }else{
-                dictionary.add(type,temp)
+        var exist = dictionary.checkButton(type)
+        if (type === 'air_con') {
+            if (exist) {
+                dictionary.updateAt(type, temp)
+            } else {
+                dictionary.add(type, temp)
             }
-        } else{
-            if (exist){
-                dictionary.updateAt(type,speed)
-            }else{
-                dictionary.add(type,speed)
+        } else {
+            if (exist) {
+                dictionary.updateAt(type, speed)
+            } else {
+                dictionary.add(type, speed)
             }
         }
         console.log(dictionary.dataStore)
+    })
+    socket.on('sensor_data', data => {
+        console.log(data)
+        socket.broadcast.emit("sensor_data", data)
     })
     socket.on('server', data => {
         console.log(data);
@@ -121,12 +129,12 @@ io.on('connection', function (socket) {
         socket.broadcast.emit("open_light", data)
         console.log(data)
     })
-    socket.on('remote',data=>{
-        socket.broadcast.emit("remote",data)
+    socket.on('remote', data => {
+        socket.broadcast.emit("remote", data)
         // console.log(data)
 
     })
-    
+
 });
 
 
