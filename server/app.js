@@ -11,10 +11,10 @@ const post = require('../routes/post')
 const get = require('../routes/get')
 
 app.use(function (req, res, next) {
-    res.setHeader("Content-Type", "text/json");
+    res.setHeader("Content-Type", "text/html");
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://kohkjongadmin.web.app');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200', 'https://kohkjongadmin.web.app/');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');

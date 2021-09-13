@@ -26,7 +26,7 @@ router.post('/getToken', (req, res) => {
         var token = jwt.sign(true, secret)
         res.status(200).json({ secretToken: token })
     }
-    res.status(400).json({ message: "wrong secret" })
+    res.status(400).json({ message: "Enter wrong secret" })
 })
 
 router.post('/register', async (req, res) => {
