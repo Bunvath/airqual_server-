@@ -20,6 +20,7 @@ router.get('/finduser', async (req, res) => {
 })
 
 router.post('/getToken', (req, res) => {
+    console.log("request token")
     const secret = req.body.secret
     if (secret == process.env.SECRET) {
         var token = jwt.sign(true, secret)
