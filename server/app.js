@@ -11,7 +11,7 @@ const post = require('../routes/post')
 const get = require('../routes/get')
 
 app.use(function (req, res, next) {
-    res.setHeader("Content-Type", "text/html");
+    res.setHeader("Content-Type", "text/json");
 
     // Website you wish to allow to connect
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200', 'https://kohkjongadmin.web.app/');
