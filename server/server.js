@@ -1,4 +1,4 @@
-var PORT = process.env.PORT || 5000;
+var PORT = process.env.PORT || 3000;
 var express = require('express');
 var app = require('./app')
 var http = require('http');
@@ -55,22 +55,27 @@ var dictionary = new Dictionary()
 //     res.send('<h1>Hello world</h1>');
 // });
 
-server.listen(PORT, function () {
-    console.log('listening on *:' + PORT);
+server.listen(PORT, "172.20.10.3", function () {
+    console.log('listening on port:' + PORT);
 }
 );
 
 var io = require('socket.io')(server, {
     cors: {
-        origin: ['http://localhost:4200', 'https://kohkjongcontrol.herokuapp.com', 'http://192.168.0.103:5000', 'https://kohkjongadmin.web.app'],
+        origin: ['http://localhost:4200', 'https://kohkjongcontrol.herokuapp.com', 'http://192.168.0.103:5000', 'http://172.20.10.1:20','http://localhost:50277','https://kohkjongadmin.web.app'],
+        
         credentials: true
     },
+    // origins: '*:*',
+    // pingTimeout: 0, 
+    // pingInterval: 500,
     allowEIO3: true
 });
 
 io.on('connection', function (socket) {
 
     console.log(socket.id + ' connected');
+    socket.emit("connection","you conned to socket server")
     socket.on('message', function (data) {
         socket.broadcast.emit('message', data);
     });
@@ -89,6 +94,7 @@ io.on('connection', function (socket) {
     });
 
     socket.on('init', data => {
+        console.log("calling init event")
         io.emit('initialize', dictionary.dataStore)
     })
     socket.on('data', data => {

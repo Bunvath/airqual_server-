@@ -18,7 +18,9 @@ router.get('/finduser', async (req, res) => {
     })
 
 })
-
+router.get('/hello',(req,res)=>{
+    console.log("calling testing api")
+})
 router.post('/getToken', (req, res) => {
     console.log("request token")
     const secret = req.body.secret
@@ -30,6 +32,7 @@ router.post('/getToken', (req, res) => {
 })
 
 router.post('/register', async (req, res) => {
+    console.log("registered calling")
     //CHECKING IF THE EMAIL EXIST
     const existedEmail = await User.findOne({ email: req.body.email })
     if (existedEmail) {
@@ -67,6 +70,7 @@ router.post('/register', async (req, res) => {
 })
 
 router.post('/login', async (req, res) => {
+    console.log("calling login")
 
     //validate the input 
     error = loginValidation(req.body)
@@ -86,7 +90,7 @@ router.post('/login', async (req, res) => {
             message: "Enter incorrect email or password"
         })
     }
-    if (!userStatus) {
+    else if (!userStatus) {
         return res.status(400).json({
             message: "Your account is not yet verified, please go to verify your account"
         })

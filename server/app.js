@@ -12,9 +12,12 @@ const get = require('../routes/get')
 
 app.use(function (req, res, next) {
     res.setHeader("Content-Type", "text/json");
-
+    const allowedOrigins = ['http://localhost:50277','http://localhost:4200','http://127.0.0.1:8020', 'http://localhost:8020', 'http://127.0.0.1:9000', 'http://localhost:9000'];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', 'https://kohkjongadmin.web.app');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
