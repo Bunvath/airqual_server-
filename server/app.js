@@ -47,7 +47,7 @@ app.use('/api/user', auth)
 app.use('/api/post', post)
 app.use('/api/get', get)
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html')
+    res.send("this is air quality server")
 })
 
 module.exports = app
