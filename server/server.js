@@ -55,7 +55,7 @@ var dictionary = new Dictionary()
 //     res.send('<h1>Hello world</h1>');
 // });
 
-server.listen(PORT, "172.20.10.3", function () {
+server.listen(PORT, function () {
     console.log('listening on port:' + PORT);
 }
 );
