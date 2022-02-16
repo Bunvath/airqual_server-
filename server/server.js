@@ -66,6 +66,8 @@ var io = require('socket.io')(server, {
         
         credentials: true
     },
+    reconnect: true, transports : ['websocket'], path: '/socket.io',
+
     allowEIO3: true
 });
 
