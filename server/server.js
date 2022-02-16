@@ -66,8 +66,6 @@ var io = require('socket.io')(server, {
         
         credentials: true
     },
-    reconnect: true, transports : ['websocket'], path: '/socket.io',
-
     allowEIO3: true
 });
 
@@ -79,6 +77,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('message', data);
     });
     socket.on('open_light', data => {
+        console.log("open light")
         socket.broadcast.emit('open_light', data)
         var message = JSON.parse(JSON.stringify(data))
         var button = message.button
@@ -122,7 +121,7 @@ io.on('connection', function (socket) {
     })
     socket.on('sensor_data', data => {
         console.log(data)
-        socket.broadcast.emit("sensor_data", data)
+        socket.broadcast.emit("sensor_data", JSON.stringify(data))
     })
     socket.on('server', data => {
         console.log(data);
