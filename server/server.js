@@ -66,9 +66,9 @@ var io = require('socket.io')(server, {
         
         credentials: true
     },
-    // origins: '*:*',
-    // pingTimeout: 0, 
-    // pingInterval: 500,
+    origins: '*:*',
+    pingTimeout: 0, 
+    pingInterval: 500,
     allowEIO3: true
 });
 
