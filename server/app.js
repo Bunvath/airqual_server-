@@ -46,8 +46,6 @@ app.use(express.json())
 app.use('/api/user', auth)
 app.use('/api/post', post)
 app.use('/api/get', get)
-app.get('/', (req, res) => {
-    res.send("this is air quality server")
-})
+
 
 module.exports = app

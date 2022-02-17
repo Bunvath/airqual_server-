@@ -27,9 +27,11 @@ router.post('/getToken', (req, res) => {
     console.log(req.body)
     if (secret == process.env.SECRET) {
         var token = jwt.sign(true, secret)
+        res.setHeader('Content-Type', 'text/plain')
         res.status(200).json({ secretToken: token })
+    }else{
+        res.status(400).json({ message: "Enter wrong secret" })
     }
-    res.status(400).json({ message: "Enter wrong secret" })
 })
 
 router.post('/register', async (req, res) => {
