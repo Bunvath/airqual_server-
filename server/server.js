@@ -121,7 +121,7 @@ io.on('connection', function (socket) {
     })
     socket.on('sensor_data', data => {
         console.log(data)
-        socket.broadcast.emit("sensor_data", JSON.parse(data))
+        socket.broadcast.emit("sensor_data",data)
     })
     socket.on('server', data => {
         console.log(data);
