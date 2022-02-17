@@ -24,7 +24,7 @@ router.get('/hello',(req,res)=>{
 router.post('/getToken', (req, res) => {
     console.log("request token")
     const secret = req.body.secret
-    console.log(secret)
+    console.log(req.body)
     if (secret == process.env.SECRET) {
         var token = jwt.sign(true, secret)
         res.status(200).json({ secretToken: token })
