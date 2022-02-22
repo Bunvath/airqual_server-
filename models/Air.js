@@ -7,13 +7,13 @@ const air = new mongoose.Schema({
 
     },
     NO: {
-        type: Number
+        type: Object
     },
     OX: {
-        type: Number
+        type: Object
     },
     SO: {
-        type: Number
+        type: Object
     },
     date: {
         type: Date,
