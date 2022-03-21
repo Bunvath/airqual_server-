@@ -119,6 +119,9 @@ io.on('connection', function (socket) {
         console.log(data)
         socket.broadcast.emit("sensor_data",data)
     })
+    socket.on('particle_data',data=>{
+        socket.broadcast.emit("particle_data",data)
+    })
     socket.on('server', data => {
         console.log(data);
     })
