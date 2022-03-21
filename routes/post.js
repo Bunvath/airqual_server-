@@ -16,6 +16,19 @@ router.post('/air',auth, async (req,res)=>{
         res.status(400).send({error:err, error: " error with upload measurement to database"})
     }
 })
+router.post('/particle',auth, async (req,res)=>{
+    const air = new Air({
+        PM1 : req.body.PM1,
+        PM2_5 : req.body.PM2_5,
+        PM10 : req.body.PM10,
+    })
+    try{
+        const airData = await air.save()
+        res.status(200).send({id: airData._id})
+    } catch(err){
+        res.status(400).send({error:err, error: " error with upload measurement to database"})
+    }
+})
 router.post('/ph', auth, async (req, res) => {
     const measure = new Measure({
         ph: req.body.ph,
