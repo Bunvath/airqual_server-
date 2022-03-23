@@ -1,0 +1,22 @@
+post http://localhost:3000/api/user/getToken
+Content-Type: application/json
+
+{
+    "secret": "fjskfjklnckajsnkjdhfjeiwfnkjsnckjnkdjnkflbjbahioerjoeiwrhjncjandcjkhnfkdnfjksdnfkncknaweipruheofndsnfjknsdvbakjbgjnsafnl"
+}
+###
+get http://localhost:3000/api/get/so
+Authorization: eyJhbGciOiJIUzI1NiJ9.dHJ1ZQ.9uoRgYEq9rRKIj1yUOT2SC0RH-0p47FZDbFmfn1wZYw
+
+
+###
+get http://localhost:3000/api/get/ox
+Authorization: eyJhbGciOiJIUzI1NiJ9.dHJ1ZQ.9uoRgYEq9rRKIj1yUOT2SC0RH-0p47FZDbFmfn1wZYw
+
+###
+get http://localhost:3000/api/get/co
+Authorization: eyJhbGciOiJIUzI1NiJ9.dHJ1ZQ.9uoRgYEq9rRKIj1yUOT2SC0RH-0p47FZDbFmfn1wZYw
+
+###
+get http://localhost:3000/api/get/no
+Authorization: eyJhbGciOiJIUzI1NiJ9.dHJ1ZQ.9uoRgYEq9rRKIj1yUOT2SC0RH-0p47FZDbFmfn1wZYw
