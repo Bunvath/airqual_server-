@@ -13,7 +13,7 @@ var time = 13;
 
 var thisWeek = getNumberOfWeek();
 
-
+var days = ["","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 
 function getNumberOfWeek() {
     const today = new Date();
@@ -28,7 +28,7 @@ router.get("/co_day", auth, (req, res) => {
                 tsWeek: { $week: "$date" },
                 year: { $year: "$date" },
                 day: { $dayOfWeek: "$date" },
-                value: "$CO",
+                value: "$CO.ppm",
             },
         },
         {
@@ -39,7 +39,7 @@ router.get("/co_day", auth, (req, res) => {
         {
             $group: {
                 _id: "$day",
-                avg_ph: { $avg: "$value" },
+                avg_co: { $avg: "$value" },
             },
         },
         {
@@ -56,296 +56,112 @@ router.get("/co_day", auth, (req, res) => {
             res.status(400).json(err);
         });
 });
-router.get("/ph_day", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $addFields: {
-                tsWeek: { $week: "$date" },
-                year: { $year: "$date" },
-                day: { $dayOfWeek: "$date" },
-                value: "$ph",
-            },
-        },
-        {
-            $match: {
-                tsWeek: thisWeek - 1
-            },
-        },
-        {
-            $group: {
-                _id: "$day",
-                avg_ph: { $avg: "$value" },
-            },
-        },
-        {
-            $sort: {
-                _id: 1
-            }
-        }
-    ])
-        .then((data) => {
-            console.log(data)
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-
-router.get("/salt_day", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $addFields: {
-                tsWeek: { $week: "$date" },
-                year: { $year: "$date" },
-                day: { $dayOfWeek: "$date" },
-                value: "$salt",
-            },
-        },
-        {
-            $match: {
-                tsWeek: thisWeek - 1
-            },
-        },
-        {
-            $group: {
-                _id: "$day",
-                avg_ph: { $avg: "$value" },
-            },
-        },
-        {
-            $sort: {
-                _id: 1
-            }
-        }
-    ])
-        .then((data) => {
-            console.log(data)
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-
-router.get("/temp_day", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $addFields: {
-                tsWeek: { $week: "$date" },
-                year: { $year: "$date" },
-                day: { $dayOfWeek: "$date" },
-                value: "$temp",
-            },
-        },
-        {
-            $match: {
-                tsWeek: thisWeek - 1
-            },
-        },
-        {
-            $group: {
-                _id: "$day",
-                avg_ph: { $avg: "$value" },
-            },
-        },
-        {
-            $sort: {
-                _id: 1
-            }
-        }
-    ])
-        .then((data) => {
-            console.log(data)
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-
-router.get("/tds_day", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $addFields: {
-                tsWeek: { $week: "$date" },
-                year: { $year: "$date" },
-                day: { $dayOfWeek: "$date" },
-                value: "$tds",
-            },
-        },
-        {
-            $match: {
-                tsWeek: thisWeek - 1
-            },
-        },
-        {
-            $group: {
-                _id: "$day",
-                avg_ph: { $avg: "$value" },
-            },
-        },
-        {
-            $sort: {
-                _id: 1
-            }
-        }
-    ])
-        .then((data) => {
-            console.log(data)
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-router.get("/ph", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $project: {
-                type: "PH",
-                value: "$ph",
-                date: 1,
-                _id: 0,
-                status: {
-                    $switch: {
-                        branches: [
-                            { case: { $lt: ["$ph", 7] }, then: "Too low" },
-                            { case: { $lte: ["$ph", 9] }, then: "Perfect" },
-                            { case: { $gt: ["$ph", 9] }, then: "Too high" },
-                        ],
-                    },
-                },
-            },
-        },
-    ])
-        .then((data) => {
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-
-router.get("/salt", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $project: {
-                type: "salinity",
-                value: "$salt",
-                date: 1,
-                _id: 0,
-                status: {
-                    $switch: {
-                        branches: [
-                            { case: { $lt: ["$salt", 7] }, then: "Too low" },
-                            { case: { $lte: ["$salt", 9] }, then: "Perfect" },
-                            { case: { $gt: ["$salt", 9] }, then: "Too high" },
-                        ],
-                    },
-                },
-            },
-        },
-    ])
-        .then((data) => {
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-
-
-router.get("/temp", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $project: {
-                type: "Temp",
-                value: "$temp",
-                date: 1,
-                _id: 0,
-                status: {
-                    $switch: {
-                        branches: [
-                            { case: { $lt: ["$temp", 7] }, then: "Too low" },
-                            { case: { $lte: ["$temp", 9] }, then: "Perfect" },
-                            { case: { $gt: ["$temp", 9] }, then: "Too high" },
-                        ],
-                    },
-                },
-            },
-        },
-    ])
-        .then((data) => {
-            const obj = JSON.parse(JSON.stringify(data));
-
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-
-router.get("/tds", auth, (req, res) => {
-    Measure.aggregate([
-        {
-            $project: {
-                type: "TDS",
-                value: "$tds",
-                date: 1,
-                _id: 0,
-                status: {
-                    $switch: {
-                        branches: [
-                            { case: { $lt: ["$tds", 7] }, then: "Too low" },
-                            { case: { $lte: ["$tds", 9] }, then: "Perfect" },
-                            { case: { $gt: ["$tds", 9] }, then: "Too high" },
-                        ],
-                    },
-                },
-            },
-        },
-    ])
-        .then((data) => {
-            res.status(200).json(data);
-        })
-        .catch((err) => {
-            res.status(400).json(err);
-        });
-});
-router.get("/test", (req, res) => {
-    res.send("hello")
-})
-
-
-router.get("/co", auth, (req, res) => {
+router.get("/so_day", auth, (req, res) => {
     Air.aggregate([
         {
-            $project: {
-                type: "CO",
-                value: "$CO.ppm",
-                date: 1,
-                _id: 0,
-                status: {
-                    $switch: {
-                        branches: [
-                            { case: { $lt: ["$CO.ppm", 7] }, then: "Too low" },
-                            { case: { $lte: ["$CO.ppm", 9] }, then: "Perfect" },
-                            { case: { $gt: ["$CO.ppm", 9] }, then: "Too high" },
-                        ],
-                    },
-                },
+            $addFields: {
+                tsWeek: { $week: "$date" },
+                year: { $year: "$date" },
+                day: { $dayOfWeek: "$date" },
+                value: "$SO.ppm",
             },
         },
-        {$sort : {date : -1}}
+        {
+            $match: {
+                tsWeek: thisWeek - 1
+            },
+        },
+        {
+            $group: {
+                _id: "$day",
+                avg_co: { $avg: "$value" },
+            },
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
     ])
         .then((data) => {
+            console.log(data)
             res.status(200).json(data);
         })
         .catch((err) => {
             res.status(400).json(err);
         });
 });
+router.get("/no_day", auth, (req, res) => {
+    Air.aggregate([
+        {
+            $addFields: {
+                tsWeek: { $week: "$date" },
+                year: { $year: "$date" },
+                day: { $dayOfWeek: "$date" },
+                value: "$NO.ppm",
+            },
+        },
+        {
+            $match: {
+                tsWeek: thisWeek - 1
+            },
+        },
+        {
+            $group: {
+                _id: "$day",
+                avg_co: { $avg: "$value" },
+            },
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ])
+        .then((data) => {
+            console.log(data)
+            res.status(200).json(data);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+});
+router.get("/ox_day", auth, (req, res) => {
+    Air.aggregate([
+        {
+            $addFields: {
+                tsWeek: { $week: "$date" },
+                year: { $year: "$date" },
+                day: { $dayOfWeek: "$date" },
+                value: "$OX.ppm",
+            },
+        },
+        {
+            $match: {
+                tsWeek: thisWeek - 1
+            },
+        },
+        {
+            $group: {
+                _id: "$day",
+                avg_co: { $avg: "$value" },
+            },
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ])
+        .then((data) => {
+            console.log(data)
+            res.status(200).json(data);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+});
+
 
 router.get("/ox", auth, (req, res) => {
     Air.aggregate([

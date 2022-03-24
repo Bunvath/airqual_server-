@@ -94,27 +94,7 @@ io.on('connection', function (socket) {
     socket.on('data', data => {
         console.log("socket", data)
     })
-    socket.on('remote', data => {
-        var control = JSON.parse(JSON.stringify(data))
-        var type = control.type
-        var temp = control.temp
-        var speed = control.speed
-        var exist = dictionary.checkButton(type)
-        if (type === 'air_con') {
-            if (exist) {
-                dictionary.updateAt(type, temp)
-            } else {
-                dictionary.add(type, temp)
-            }
-        } else {
-            if (exist) {
-                dictionary.updateAt(type, speed)
-            } else {
-                dictionary.add(type, speed)
-            }
-        }
-        console.log(dictionary.dataStore)
-    })
+
     socket.on('sensor_data', data => {
         console.log(data)
         socket.broadcast.emit("sensor_data",data)
