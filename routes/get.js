@@ -39,7 +39,7 @@ router.get("/co_day", auth, (req, res) => {
         {
             $group: {
                 _id: "$day",
-                avg_co: { $avg: "$value" },
+                avg: { $avg: "$value" },
             },
         },
         {
@@ -74,7 +74,7 @@ router.get("/so_day", auth, (req, res) => {
         {
             $group: {
                 _id: "$day",
-                avg_co: { $avg: "$value" },
+                avg: { $avg: "$value" },
             },
         },
         {
@@ -109,7 +109,7 @@ router.get("/no_day", auth, (req, res) => {
         {
             $group: {
                 _id: "$day",
-                avg_co: { $avg: "$value" },
+                avg: { $avg: "$value" },
             },
         },
         {
@@ -144,7 +144,7 @@ router.get("/ox_day", auth, (req, res) => {
         {
             $group: {
                 _id: "$day",
-                avg_co: { $avg: "$value" },
+                avg: { $avg: "$value" },
             },
         },
         {
