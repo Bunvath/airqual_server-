@@ -247,6 +247,35 @@ router.get("/no", auth, (req, res) => {
             res.status(400).json(err);
         });
 });
+
+router.get("/co", auth, (req, res) => {
+    Air.aggregate([
+        {
+            $project: {
+                type: "CO",
+                value: "$CO.ppm",
+                date: 1,
+                _id: 0,
+                status: {
+                    $switch: {
+                        branches: [
+                            { case: { $lt: ["$CO.ppm", 7] }, then: "Too low" },
+                            { case: { $lte: ["$CO.ppm", 9] }, then: "Perfect" },
+                            { case: { $gt: ["$CO.ppm", 9] }, then: "Too high" },
+                        ],
+                    },
+                },
+            },
+        },
+        {$sort : {date : -1}}
+    ])
+        .then((data) => {
+            res.status(200).json(data);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+});
 router.get("/pm1", auth, (req, res) => {
     Air.aggregate([
         {
