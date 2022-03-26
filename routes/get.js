@@ -6,20 +6,17 @@ const Measure = require("../models/Measure");
 const Air = require("../models/Air")
 const { response } = require("../server/app");
 
-var month = "08";
-var year = "2023";
-var day = "05";
-var time = 13;
-
-var thisWeek = getNumberOfWeek();
-
-var days = ["","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
+var thisWeek = getNumberOfWeek()
+console.log("this week is ", thisWeek)
+// var days = ["","Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]
 
 function getNumberOfWeek() {
     const today = new Date();
     const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+    console.log("first day of the year", firstDayOfYear)
     const pastDaysOfYear = (today - firstDayOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    console.log("past day of the year ", pastDaysOfYear)
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay()) / 7);
 }
 router.get("/co_day", auth, (req, res) => {
     Air.aggregate([
