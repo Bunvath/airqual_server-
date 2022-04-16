@@ -8,16 +8,9 @@ server.listen(PORT, function () {
 }
 );
 
-var io = require('socket.io')(server, {
-    cors: {
-        origin: ['http://localhost:4200', 'https://kohkjongcontrol.herokuapp.com', 'http://192.168.0.103:5000', 'http://172.20.10.1:20','http://localhost:50277','https://kohkjongadmin.web.app'],
-        
-        credentials: true
-    },
-    allowEIO3: true
-});
 
-module.exports = io 
+
+module.exports = server
 
 
 
