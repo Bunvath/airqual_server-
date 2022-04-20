@@ -18,8 +18,9 @@ router.get('/finduser', async (req, res) => {
     })
 
 })
-router.get('/hello',(req,res)=>{
-    console.log("calling testing api")
+
+router.get('/active',(req,res)=>{
+    res.send("server active")
 })
 router.post('/getToken', (req, res) => {
     console.log("request token")
