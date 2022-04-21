@@ -5,6 +5,7 @@ const auth = require("../verifyToken");
 const Measure = require("../models/Measure");
 const Air = require("../models/Air")
 const { response } = require("../server/app");
+const Particle = require("../models/Particle");
 
 var thisWeek = getNumberOfWeek()
 console.log("this week is ", thisWeek)
@@ -158,7 +159,113 @@ router.get("/ox_day", auth, (req, res) => {
             res.status(400).json(err);
         });
 });
+router.get("/ph1_day", auth, (req, res) => {
+    Particle.aggregate([
+        {
+            $addFields: {
+                tsWeek: { $week: "$date" },
+                year: { $year: "$date" },
+                day: { $dayOfWeek: "$date" },
+                value: "$ph1",
+            },
+        },
+        {
+            $match: {
+                tsWeek: thisWeek - 1
+            },
+        },
+        {
+            $group: {
+                _id: "$day",
+                avg_ph: { $avg: "$value" },
+            },
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ])
+        .then((data) => {
+            console.log(data)
+            res.status(200).json(data);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+});
 
+router.get("/ph2_5_day", auth, (req, res) => {
+    Measure.aggregate([
+        {
+            $addFields: {
+                tsWeek: { $week: "$date" },
+                year: { $year: "$date" },
+                day: { $dayOfWeek: "$date" },
+                value: "$ph2_5",
+            },
+        },
+        {
+            $match: {
+                tsWeek: thisWeek - 1
+            },
+        },
+        {
+            $group: {
+                _id: "$day",
+                avg_ph: { $avg: "$value" },
+            },
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ])
+        .then((data) => {
+            console.log(data)
+            res.status(200).json(data);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+});
+
+router.get("/ph10_day", auth, (req, res) => {
+    Measure.aggregate([
+        {
+            $addFields: {
+                tsWeek: { $week: "$date" },
+                year: { $year: "$date" },
+                day: { $dayOfWeek: "$date" },
+                value: "$ph10",
+            },
+        },
+        {
+            $match: {
+                tsWeek: thisWeek - 1
+            },
+        },
+        {
+            $group: {
+                _id: "$day",
+                avg_ph: { $avg: "$value" },
+            },
+        },
+        {
+            $sort: {
+                _id: 1
+            }
+        }
+    ])
+        .then((data) => {
+            console.log(data)
+            res.status(200).json(data);
+        })
+        .catch((err) => {
+            res.status(400).json(err);
+        });
+});
 
 router.get("/ox", auth, (req, res) => {
     Air.aggregate([
@@ -274,7 +381,7 @@ router.get("/co", auth, (req, res) => {
         });
 });
 router.get("/pm1", auth, (req, res) => {
-    Air.aggregate([
+    Particle.aggregate([
         {
             $project: {
                 type: "pm1",
@@ -300,8 +407,9 @@ router.get("/pm1", auth, (req, res) => {
             res.status(400).json(err);
         });
 });
+
 router.get("/pm2_5", auth, (req, res) => {
-    Measure.aggregate([
+    Particle.aggregate([
         {
             $project: {
                 type: "pm2_5",
@@ -328,7 +436,7 @@ router.get("/pm2_5", auth, (req, res) => {
         });
 });
 router.get("/pm10", auth, (req, res) => {
-    Measure.aggregate([
+    Particle.aggregate([
         {
             $project: {
                 type: "pm10",
