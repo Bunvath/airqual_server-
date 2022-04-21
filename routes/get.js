@@ -159,7 +159,7 @@ router.get("/ox_day", auth, (req, res) => {
             res.status(400).json(err);
         });
 });
-router.get("/ph1_day", auth, (req, res) => {
+router.get("/pm1_day", auth, (req, res) => {
     Particle.aggregate([
         {
             $addFields: {
@@ -195,7 +195,7 @@ router.get("/ph1_day", auth, (req, res) => {
         });
 });
 
-router.get("/ph2_5_day", auth, (req, res) => {
+router.get("/pm2_5_day", auth, (req, res) => {
     Measure.aggregate([
         {
             $addFields: {
@@ -231,7 +231,7 @@ router.get("/ph2_5_day", auth, (req, res) => {
         });
 });
 
-router.get("/ph10_day", auth, (req, res) => {
+router.get("/pm10_day", auth, (req, res) => {
     Measure.aggregate([
         {
             $addFields: {
